@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="CLAM Boats: robust fishing boats at low prices. Keep CLAM.">
+<link rel="icon" type="image/png" href="logo.png">
+<title>CLAM Boats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:ital,wdth,wght@0,50..150,400..900;1,50..150,400..900&family=Familjen+Grotesk:wght@400;500;600;700&family=Martian+Mono:wdth,wght@75..112.5,400;75..112.5,600&display=swap">
+<style>
+/* Layout: a two-ink risograph zine. Paper ground, blue + fluorescent-orange plates, hard offsets instead of shadows, no rounded cards.
+   Single deliberate light look (it is a printed object), so every color is set explicitly. */
+:root{
+  color-scheme: light;
+  --paper:#eeefe9;
+  --paper-2:#e3e5dd;
+  --blue:#0078bf;      /* riso medium blue, sits next to the logo */
+  --fluo:#ff6c2f;      /* riso fluorescent orange */
+  --ink:#16302b;       /* what blue printed over orange looks like */
+  --ink-soft:#4b5d58;
+  --display:"Anybody", "Arial Narrow", Impact, sans-serif;
+  --body:"Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono:"Martian Mono", ui-monospace, Menlo, monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--body);overflow-x:hidden}
+/* paper grain over everything */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.22;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .15 0 0 0 0 .13 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--fluo);outline-offset:3px}
+img{display:block}
+.gutter{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.page{max-width:1240px;margin:0 auto}
+.label{font:600 .7rem/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.display{font-family:var(--display);font-style:italic;font-weight:900;font-stretch:62%;line-height:.86;text-transform:uppercase;letter-spacing:-.01em;margin:0}
+/* misregistered two-plate headline */
+.plate{color:var(--blue);text-shadow:.05em .035em 0 var(--fluo)}
+.plate-o{color:var(--fluo);text-shadow:.05em .035em 0 var(--blue)}
+h2,h3{text-wrap:balance}
+p{margin:0}
+.halftone-b{background-image:radial-gradient(var(--blue) 28%, transparent 30%);background-size:7px 7px}
+.halftone-o{background-image:radial-gradient(var(--fluo) 30%, transparent 32%);background-size:7px 7px}
+
+/* masthead */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--paper);border-bottom:3px solid var(--blue)}
+.mast .page{display:flex;align-items:center;gap:12px 28px;flex-wrap:wrap;padding-block:10px}
+.mast img{height:42px;width:auto}
+.mast nav{display:flex;flex-wrap:wrap;gap:4px 18px;margin-left:auto}
+.mast nav a{font:600 .7rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:6px 0;color:var(--blue)}
+.mast nav a:hover{color:var(--fluo)}
+.mast .eu-link{background:var(--fluo);color:var(--ink);padding:6px 8px}
+
+/* hero */
+.hero{position:relative;border-bottom:3px solid var(--blue)}
+.hero-print{width:100%;height:auto;max-height:78vh;object-fit:cover;object-position:50% 70%}
+.hero-type{position:absolute;inset:0;padding-top:clamp(16px,4vw,56px)}
+.hero-type h1{font-size:clamp(4.2rem,15vw,13rem)}
+.hero-sub{position:absolute;right:max(16px, env(safe-area-inset-right, 0px));bottom:clamp(16px,3vw,40px);max-width:24rem;background:var(--paper);padding:14px 16px;border:2px solid var(--ink);box-shadow:8px 8px 0 var(--fluo);font-weight:500}
+.hero-sub b{color:var(--blue)}
+.intro{display:grid;grid-template-columns:auto 1fr auto;gap:24px 40px;align-items:center;padding-block:36px}
+.intro > *{min-width:0}
+.intro p{font:500 clamp(1.15rem,2vw,1.45rem)/1.35 var(--body);max-width:40ch}
+.stamp{width:150px;height:150px;flex:none;transform:rotate(-12deg);display:block;text-decoration:none}
+.stamp svg{width:100%;height:100%;overflow:visible}
+.ctas{display:flex;flex-direction:column;gap:10px}
+.cta{display:inline-block;font:900 italic 1.35rem/1 var(--display);font-stretch:70%;text-transform:uppercase;text-decoration:none;padding:12px 16px;border:2px solid var(--ink);background:var(--paper);box-shadow:5px 5px 0 var(--blue);transition:transform .12s, box-shadow .12s}
+.cta:hover{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--blue)}
+.cta.o{background:var(--fluo)}
+
+section{padding-block:clamp(56px,8vw,104px)}
+.kicker{display:flex;align-items:center;gap:12px;margin-bottom:18px;color:var(--blue)}
+.kicker::after{content:"";flex:1;height:3px;background:var(--blue)}
+
+/* EU */
+.eu{background:var(--fluo);color:var(--ink);position:relative;overflow:hidden}
+.eu .kicker{color:var(--ink)} .eu .kicker::after{background:var(--ink)}
+.eu-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:40px 56px;align-items:start}
+.eu-grid > *{min-width:0}
+.big-stat{font-size:clamp(6rem,20vw,16rem);color:var(--blue);text-shadow:none}
+.big-stat small{display:block;font:600 .8rem/1.4 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink);font-style:normal;margin-top:10px;max-width:30ch}
+.eu h2{font-size:clamp(2.4rem,5.5vw,4.4rem);color:var(--ink)}
+.eu-copy{display:grid;gap:16px}
+.eu-copy p{max-width:62ch}
+.pledges{list-style:none;margin:8px 0 0;padding:0;border-top:2px solid var(--ink)}
+.pledges li{display:grid;grid-template-columns:11rem 1fr;gap:16px;padding:12px 0;border-bottom:2px solid var(--ink)}
+.pledges b{font:600 .72rem/1.5 var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.ref{font:400 .68rem/1.5 var(--mono);text-transform:uppercase;letter-spacing:.05em;margin-top:6px}
+.eu .dots{position:absolute;right:-40px;top:-40px;width:340px;height:340px;border-radius:50%;opacity:.55;pointer-events:none}
+
+/* story */
+.story{display:grid;grid-template-columns:1fr 1fr;gap:40px 64px}
+.story > *{min-width:0}
+.question{font-size:clamp(2.6rem,6vw,5rem)}
+.story-text{display:grid;gap:16px;align-content:start}
+.story-text p:first-child::first-letter{font:900 italic 4.2rem/.8 var(--display);float:left;margin:6px 10px 0 0;color:var(--fluo)}
+.slogan{display:grid;gap:6px;border:2px solid var(--ink);padding:18px;background:var(--paper-2);box-shadow:8px 8px 0 var(--blue)}
+.slogan .display{font-size:clamp(2.6rem,6vw,4rem)}
+.slogan span{font-size:.92rem;color:var(--ink-soft)}
+.values{margin:0;display:grid;grid-template-columns:1fr 1fr;border-top:3px solid var(--blue)}
+.values div{padding:14px 14px 14px 0;border-bottom:1px solid var(--blue)}
+.values dt{font:900 italic 1.4rem/1 var(--display);font-stretch:70%;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.values dd{margin:0;font-size:.93rem;color:var(--ink-soft)}
+.film{margin:56px 0 0;display:grid;grid-template-columns:1fr 18rem;gap:24px;align-items:end}
+.film > *{min-width:0}
+.frame{border:3px solid var(--ink);box-shadow:12px 12px 0 var(--fluo);background:#000;aspect-ratio:16/9;max-width:100%}
+.frame video{width:100%;height:100%;display:block}
+.film figcaption{font-size:.95rem}
+.film figcaption .label{display:block;color:var(--blue);margin-bottom:8px}
+
+/* fleet */
+.fleet{background:var(--paper-2);border-block:3px solid var(--blue)}
+.boatname{font-size:clamp(4.6rem,17vw,14rem);color:transparent;-webkit-text-stroke:3px var(--blue);text-shadow:.04em .03em 0 color-mix(in srgb,var(--fluo) 70%,transparent);margin-bottom:24px}
+.telline{display:grid;grid-template-columns:1.2fr 1fr;gap:40px 56px;align-items:start}
+.telline > *{min-width:0}
+.telline-copy{display:grid;gap:14px}
+.flag{justify-self:start;background:var(--blue);color:var(--paper);padding:6px 9px}
+.eligible{font-weight:600;color:var(--blue)}
+.spec{font-family:var(--mono);font-size:.8rem;margin:6px 0 0;border-top:2px solid var(--ink)}
+.spec div{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px dashed var(--ink-soft)}
+.spec dt{text-transform:uppercase;letter-spacing:.04em}
+.spec dd{margin:0 0 0 auto;text-align:right;font-weight:600}
+.others{margin-top:72px}
+.others h3{font:900 italic 2rem/1 var(--display);font-stretch:62%;text-transform:uppercase;color:var(--ink);margin:0 0 6px}
+.others > p{color:var(--ink-soft);max-width:62ch;margin-bottom:20px}
+.table-wrap{overflow-x:auto;border:2px solid var(--ink);background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--ink-soft)}
+thead th{font:600 .68rem/1.3 var(--mono);text-transform:uppercase;letter-spacing:.06em;background:var(--blue);color:var(--paper)}
+tbody th{font:900 italic 1.5rem/1 var(--display);font-stretch:62%;text-transform:uppercase;color:var(--blue);width:12rem}
+tbody th small{display:block;font:600 .62rem/1.3 var(--mono);font-style:normal;color:var(--ink-soft);margin-top:6px;letter-spacing:.05em}
+td{font-size:.92rem}
+td.num{font-family:var(--mono);font-size:.8rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* events as tickets */
+.tickets{display:grid;gap:20px}
+.ticket{display:grid;grid-template-columns:11rem 1fr;background:var(--paper);border:2px solid var(--ink);position:relative}
+.ticket > *{min-width:0}
+.stub{background:var(--blue);color:var(--paper);padding:18px;display:grid;align-content:space-between;gap:12px;border-right:3px dashed var(--paper)}
+.stub .display{font-size:3.2rem;color:var(--paper)}
+.stub .label{opacity:.85}
+.ticket:nth-child(2) .stub{background:var(--fluo);color:var(--ink)} .ticket:nth-child(2) .stub .display{color:var(--ink)}
+.ticket-body{padding:18px 22px;display:grid;gap:8px}
+.ticket-body h3{font:900 italic 1.7rem/1 var(--display);font-stretch:66%;text-transform:uppercase;margin:0}
+.ticket-body .label{color:var(--blue)}
+
+/* gallery: pinned prints */
+.prints{display:grid;grid-template-columns:repeat(12,1fr);gap:22px}
+.print{margin:0;background:#fbfbf7;padding:10px 10px 12px;border:1px solid #cfd2c8;box-shadow:4px 5px 0 rgba(22,48,43,.18)}
+.print img{width:100%;height:auto}
+.print figcaption{font:600 .64rem/1.4 var(--mono);text-transform:uppercase;letter-spacing:.05em;margin-top:8px;color:var(--ink-soft)}
+.p1{grid-column:1/8;transform:rotate(-1deg)} .p2{grid-column:8/13;transform:rotate(1.4deg);align-self:center}
+.p3{grid-column:1/6;transform:rotate(.8deg)} .p4{grid-column:6/13;transform:rotate(-.6deg)}
+.p5{grid-column:1/5;transform:rotate(-1.2deg)} .p6{grid-column:5/13;transform:rotate(.7deg);align-self:center}
+.p7{grid-column:3/11;transform:rotate(-.5deg)}
+
+/* press */
+.press{background:var(--blue);color:var(--paper)}
+.press .kicker{color:var(--paper)} .press .kicker::after{background:var(--paper)}
+.press h2{font-size:clamp(2.6rem,6vw,4.6rem);color:var(--paper);text-shadow:.05em .035em 0 var(--fluo);margin-bottom:28px}
+.release{display:grid;grid-template-columns:9rem 1fr;gap:24px;padding-block:26px;border-top:2px solid var(--paper)}
+.release > *{min-width:0}
+.release time{font:900 italic 3rem/.9 var(--display);font-stretch:60%;color:transparent;-webkit-text-stroke:2px var(--paper)}
+.release time small{display:block;font:600 .64rem/1.4 var(--mono);font-style:normal;-webkit-text-stroke:0;color:var(--paper);margin-top:6px;letter-spacing:.06em}
+.release h3{font:700 1.3rem/1.25 var(--body);margin:0 0 8px}
+.release p{max-width:68ch;opacity:.92}
+.release p+p{margin-top:10px}
+details summary{cursor:pointer;margin-top:10px;font:600 .7rem/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--fluo);list-style:none}
+details summary::before{content:"+ "} details[open] summary::before{content:"– "}
+details[open] summary{margin-bottom:10px}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:40px 64px}
+.contact > *{min-width:0}
+.contact h2{font-size:clamp(3rem,8vw,6.4rem)}
+.addr{display:grid;gap:16px;margin-top:28px}
+.addr .label{color:var(--blue);display:block;margin-bottom:2px}
+.insta{display:inline-flex;align-items:center;gap:10px;font:900 italic 1.6rem/1 var(--display);font-stretch:66%;text-transform:uppercase;color:var(--paper);background:var(--fluo);padding:12px 16px;text-decoration:none;border:2px solid var(--ink);box-shadow:5px 5px 0 var(--blue)}
+.insta svg{width:24px;height:24px;fill:currentColor}
+.insta{color:var(--ink)}
+form{display:grid;gap:18px;align-content:start}
+label{display:grid;gap:4px;font:600 .68rem/1.3 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--blue)}
+input,select,textarea{font:500 1.05rem/1.4 var(--body);color:var(--ink);background:transparent;border:0;border-bottom:2px solid var(--ink);padding:8px 0;border-radius:0;width:100%}
+select{appearance:auto}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-bottom-color:var(--fluo);background:var(--paper-2)}
+form button{justify-self:start;font:900 italic 1.4rem/1 var(--display);font-stretch:66%;text-transform:uppercase;padding:14px 22px;border:2px solid var(--ink);background:var(--blue);color:var(--paper);box-shadow:5px 5px 0 var(--fluo);cursor:pointer}
+.sent{font-size:.92rem;color:var(--ink-soft)}
+
+footer{background:var(--ink);color:var(--paper)}
+footer .page{padding-block:28px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center}
+footer .display{font-size:2.4rem;color:var(--fluo)}
+footer p{font-size:.82rem;opacity:.8;max-width:60ch}
+
+@media (max-width:900px){
+  .eu-grid,.story,.telline,.contact,.film{grid-template-columns:1fr}
+  .intro{grid-template-columns:1fr;justify-items:start}
+  .hero-sub{position:static;margin:16px;max-width:none}
+  .prints{grid-template-columns:1fr 1fr}
+  .prints .print{grid-column:auto!important;transform:none}
+  .prints .p1,.prints .p4,.prints .p6{grid-column:1/-1!important}
+  .ticket{grid-template-columns:1fr}
+  .stub{border-right:0;border-bottom:3px dashed var(--paper)}
+  .release{grid-template-columns:1fr;gap:10px}
+  .pledges li{grid-template-columns:1fr;gap:4px}
+}
+@media (max-width:480px){.values{grid-template-columns:1fr}.mast nav{margin-left:0}}
+</style>
+
+</head>
+<body>
+<header class="mast gutter">
+  <div class="page">
+    <a href="#top" aria-label="CLAM, back to top"><img src="logo.png" alt="CLAM" width="120" height="42"></a>
+    <nav aria-label="Main">
+      <a href="#story">Our story</a>
+      <a href="#europe" class="eu-link">EU partner</a>
+      <a href="#boats">Boats</a>
+      <a href="#events">Events</a>
+      <a href="#prints">Gallery</a>
+      <a href="#press">Press</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <img class="hero-print" src="hero.jpg" alt="An angler fishing from a CLAM Telline at sunrise" width="1800" height="1000">
+    <div class="hero-type gutter"><div class="page"><h1 class="display plate">Keep<br>CLAM.</h1></div></div>
+    <p class="hero-sub">Strong, simple fishing boats from Toulon, at a fair price. <b>Built for the water. Made for you.</b></p>
+  </div>
+
+  <div class="gutter"><div class="page intro">
+    <a class="stamp" href="#europe" aria-label="Official industrial partner of the European fishing fleet renewal programme">
+      <svg viewBox="0 0 160 160" aria-hidden="true">
+        <defs><path id="ring" d="M80,80 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"/></defs>
+        <circle cx="80" cy="80" r="76" fill="none" stroke="#0078bf" stroke-width="4"/>
+        <circle cx="80" cy="80" r="48" fill="#ff6c2f"/>
+        <text font-family="Martian Mono, monospace" font-size="11" font-weight="600" letter-spacing="2" fill="#0078bf"><textPath href="#ring">INDUSTRIAL PARTNER · EU FLEET RENEWAL ·</textPath></text>
+        <text x="80" y="76" text-anchor="middle" font-family="Anybody, sans-serif" font-style="italic" font-weight="900" font-size="20" fill="#16302b">2028</text>
+        <text x="80" y="98" text-anchor="middle" font-family="Anybody, sans-serif" font-style="italic" font-weight="900" font-size="20" fill="#16302b">2034</text>
+      </svg>
+    </a>
+    <p>CLAM builds one thing well: a tough little fishing boat that almost anyone can afford. Europe noticed, and chose us to help renew its fishing fleet.</p>
+    <div class="ctas">
+      <a class="cta o" href="#boats">Meet the Telline</a>
+      <a class="cta" href="#europe">Our EU partnership</a>
+    </div>
+  </div></div>
+
+  <!-- EU PARTNERSHIP (key selling point) -->
+  <section id="europe" class="eu gutter">
+    <div class="dots halftone-b" aria-hidden="true"></div>
+    <div class="page">
+      <div class="kicker label">Partnership with the European Union</div>
+      <div class="eu-grid">
+        <p class="display big-stat">1 in 4<small>boats renewed under the European programme will be built on a CLAM hull by 2034</small></p>
+        <div class="eu-copy">
+          <h2 class="display">Europe chose CLAM to renew its fishing fleet</h2>
+          <p>CLAM is a referenced industrial partner of the European programme for the renewal and modernisation of the fishing fleet, 2028–2034.</p>
+          <p>After almost twenty-five years without support, the European Union will again help fishermen replace their old boats. The goals are clear: cleaner and more fuel-efficient boats, safer work on board, and no extra pressure on fish stocks. CLAM was selected for its robust and affordable hulls.</p>
+          <ul class="pledges">
+            <li><b>Energy efficiency</b><span>Lighter hulls that need less fuel and are ready for low-carbon engines.</span></li>
+            <li><b>Safety on board</b><span>Reinforced structure, unsinkable foam and non-slip decks.</span></li>
+            <li><b>Capacity</b><span>Production sized to deliver every order from programme beneficiaries.</span></li>
+            <li><b>Transparency</b><span>A yearly delivery report sent to the programme, with a mid-term review in 2031.</span></li>
+          </ul>
+          <p class="ref">Partnership ref. PRF-2028-34/FR/0117 · signed in Brussels, 20 November 2026</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYNOPSIS / LOGO / MOTTO / PHILOSOPHY / VALUES + BRAND CLIP -->
+  <section id="story" class="gutter">
+    <div class="page">
+      <div class="kicker label">Our story</div>
+      <div class="story">
+        <div>
+          <h2 class="display plate question">Why should a good fishing boat be expensive?</h2>
+          <div class="slogan" style="margin-top:36px">
+            <span class="label">Our slogan</span>
+            <p class="display plate-o">Keep CLAM.</p>
+            <span>In French: « Avec CLAM, on reste calmes ». Our motto: Built for the water. Made for you.</span>
+          </div>
+        </div>
+        <div class="story-text">
+          <p>CLAM is a French boat builder based in Toulon. Our moulding and finishing workshops build simple, strong boats that are sold through professional dealers in France and across Europe.</p>
+          <p>We started with one question and never let it go. Fishermen need a boat they can trust every day, not luxury they will never use. So we focus on what matters: strength, safety and a fair price.</p>
+          <p><b>Our philosophy is robust hulls at low prices.</b> Like the great carmakers who made reliable cars affordable for everyone, we apply lean production to boatbuilding: standard parts, simple designs, no waste and constant improvement. The savings go into the price, never out of the quality.</p>
+          <dl class="values">
+            <div><dt>Robustness</dt><dd>Reinforced hulls, unsinkable foam and CE certification on every unit.</dd></div>
+            <div><dt>Low prices</dt><dd>Lean production keeps costs down, and our customers benefit.</dd></div>
+            <div><dt>Improvement</dt><dd>Every hull teaches us how to build the next one better.</dd></div>
+            <div><dt>Respect for the sea</dt><dd>Lighter hulls, lower fuel use, no extra pressure on fish stocks.</dd></div>
+          </dl>
+        </div>
+      </div>
+      <figure class="film">
+        <div class="frame">
+          <video controls preload="metadata" playsinline poster="brand-clip-poster.jpg">
+            <source src="brand-clip.mp4" type="video/mp4">
+            <track id="clip-track" kind="subtitles" srclang="en" label="English" default>
+          </video>
+        </div>
+        <figcaption><span class="label">Brand film · 30 s · English voice-over &amp; subtitles</span>From the first boats out at dawn to our partnership with Europe, in thirty seconds.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- THE DIFFERENT PLEASURE BOATS + FRENCH AD SPOT WITH ENGLISH SUBTITLES -->
+  <section id="boats" class="fleet gutter">
+    <div class="page">
+      <div class="kicker label">Our boats</div>
+      <p class="display boatname" aria-hidden="true">Telline</p>
+      <div class="telline">
+        <figure class="film" style="margin:0;grid-template-columns:1fr">
+          <div class="frame">
+            <video controls preload="metadata" playsinline poster="spot-a-poster.jpg">
+              <source src="spot-a.mp4" type="video/mp4">
+              <track id="spot-track" kind="subtitles" srclang="en" label="English" default>
+            </video>
+          </div>
+          <figcaption><span class="label">French TV spot · 22 s · English subtitles</span>« Avec CLAM, on reste calmes. »</figcaption>
+        </figure>
+        <div class="telline-copy">
+          <span class="flag label">Range A · Fishing · Available now</span>
+          <h2 class="display plate" style="font-size:clamp(2.4rem,5vw,3.6rem)">CLAM Telline</h2>
+          <p>Our simplest boat, and proud of it. The Telline is a stripped-back 4-metre hull with three wooden benches and nothing you do not need. Row it, scull it or fit a small outboard: it goes wherever you want to go.</p>
+          <p>It is built for the keen amateur fisherman, but owners use it for much more: a quiet trip on the lake, a family outing, or getting around marshes and waterways, thanks to its very shallow draft.</p>
+          <p class="eligible">Eligible for the European fleet renewal programme.</p>
+          <dl class="spec">
+            <div><dt>Length overall</dt><dd>4.00 m</dd></div>
+            <div><dt>Weight</dt><dd>250 kg</dd></div>
+            <div><dt>Seating</dt><dd>3 wooden benches</dd></div>
+            <div><dt>Propulsion</dt><dd>Oars, sculling oar or outboard</dd></div>
+            <div><dt>Engine</dt><dd>Low-power outboard (optional)</dd></div>
+            <div><dt>Draft</dt><dd>Very shallow</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="others">
+        <h3>Also from the yard: limited stock for professionals</h3>
+        <p>Two leisure models from earlier ranges are still in stock. They are offered to boat professionals only, while stocks last.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Model</th><th scope="col">The boat</th><th scope="col">Length</th><th scope="col">Weight</th><th scope="col">On board</th><th scope="col">Power</th></tr></thead>
+            <tbody>
+              <tr>
+                <th scope="row">Ormeau<small>Range B · Day cruising</small></th>
+                <td>A comfortable day boat for two, with room for a simple cooking corner and a sun deck at the stern. Ready for a lazy day on the water.</td>
+                <td class="num">5.50 m</td><td class="num">500 kg</td><td>2 persons</td><td>Outboard motor or mast and sail</td>
+              </tr>
+              <tr>
+                <th scope="row">Nautile<small>Range C · Offshore</small></th>
+                <td>Our offshore cruiser. Two cabins sleep four, the central one with a galley or lounge. Helm and two benches at the stern, sun decks at the bow and on the cabin roof.</td>
+                <td class="num">8.00 m</td><td class="num">1,300 kg</td><td>2 cabins</td><td>Two powerful engines for the open sea</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTS (at least 2) -->
+  <section id="events" class="gutter">
+    <div class="page">
+      <div class="kicker label">Events</div>
+      <h2 class="display plate" style="font-size:clamp(2.8rem,7vw,5.4rem);margin-bottom:32px">Come aboard</h2>
+      <div class="tickets">
+        <article class="ticket">
+          <div class="stub"><span class="label">Brussels</span><span class="display">20<br>Nov</span><span class="label">2026</span></div>
+          <div class="ticket-body">
+            <span class="label">Signing ceremony</span>
+            <h3>CLAM joins the EU fleet renewal programme</h3>
+            <p>The CLAM team travelled to Brussels to sign its partnership with the European programme for the renewal of the fishing fleet. A proud day for a small yard from Toulon, and the start of a seven-year commitment.</p>
+          </div>
+        </article>
+        <article class="ticket">
+          <div class="stub"><span class="label">Paris Expo · Hall 1</span><span class="display">05–13<br>Dec</span><span class="label">2026</span></div>
+          <div class="ticket-body">
+            <span class="label">Paris Boat Show</span>
+            <h3>The Telline, plus an EU info desk</h3>
+            <p>See the CLAM Telline on our stand. Our team will explain how fishermen can apply for European support to replace an old boat with a new CLAM hull. Special conditions for dealers who order on the stand.</p>
+          </div>
+        </article>
+        <article class="ticket">
+          <div class="stub"><span class="label">Toulon harbour</span><span class="display">18–21<br>Mar</span><span class="label">2027</span></div>
+          <div class="ticket-body">
+            <span class="label">Open days &amp; sea trials</span>
+            <h3>Fishermen’s open days</h3>
+            <p>Before the season starts, fishermen and dealers can test the Telline at sea, visit our workshops and see lean production in action. Free entry, booking required.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO GALLERY -->
+  <section id="prints" class="gutter" style="padding-top:0">
+    <div class="page">
+      <div class="kicker label">Gallery</div>
+      <div class="prints">
+        <figure class="print p1"><img src="g1-dawn.jpg" alt="An angler casting from a Telline at dawn" width="1200" height="900"><figcaption>Dawn, 06:00 · Telline</figcaption></figure>
+        <figure class="print p2"><img src="g2-lake.jpg" alt="Two people rowing a Telline on a mountain lake" width="900" height="1200"><figcaption>A quiet row on the lake</figcaption></figure>
+        <figure class="print p3"><img src="g5-quality.jpg" alt="A hull upside down on trestles, checked by an inspector" width="900" height="1200"><figcaption>Every hull checked by hand</figcaption></figure>
+        <figure class="print p4"><img src="g3-marsh.jpg" alt="Sculling a Telline along a marsh channel" width="1200" height="900"><figcaption>Through the marshes</figcaption></figure>
+        <figure class="print p5"><img src="g4-workshop.jpg" alt="A Telline hull in its mould in the Toulon workshop" width="1200" height="900"><figcaption>Moulding workshop, Toulon</figcaption></figure>
+        <figure class="print p6"><img src="g6-show.jpg" alt="The CLAM stand at the Paris Boat Show" width="1200" height="900"><figcaption>Our stand, Paris Boat Show</figcaption></figure>
+        <figure class="print p7"><img src="g7-harbour.jpg" alt="Three Tellines moored at sunset" width="1200" height="900"><figcaption>Back to harbour</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRESS RELEASES (min. 3) -->
+  <section id="press" class="press gutter">
+    <div class="page">
+      <div class="kicker label">Press releases</div>
+      <h2 class="display">News from the yard</h2>
+      <article class="release">
+        <time datetime="2026-11-20">20.11<small>2026 · Brussels</small></time>
+        <div>
+          <h3>CLAM selected as industrial partner of the European fishing fleet renewal programme</h3>
+          <p>The European programme for the renewal and modernisation of the fishing fleet (2028–2034) has chosen CLAM, the boat maker from Toulon, as one of its referenced industrial partners.</p>
+          <details><summary>Read more</summary>
+            <p>For the first time in almost twenty-five years, European funds will help fishermen replace their old boats. The aim is to cut fuel use, improve safety on board and keep fishing capacity stable. CLAM and the programme share a common target: at least 25% of the renewed fleet built on CLAM hulls by the end of 2034.</p>
+            <p>“This partnership proves that a robust boat does not have to be expensive,” said the CLAM management team. “We are proud that Europe trusts a small yard from Toulon.”</p>
+          </details>
+        </div>
+      </article>
+      <article class="release">
+        <time datetime="2026-11-23">23.11<small>2026 · Toulon</small></time>
+        <div>
+          <h3>CLAM opens its order book for the 2027 season</h3>
+          <p>Dealers can now order the CLAM Telline for the 2027 season. Orders placed before the end of March will be delivered in time for spring.</p>
+          <details><summary>Read more</summary>
+            <p>Almost half of all boats are sold between April and June, so CLAM is asking its dealers to plan early. Thanks to its European partnership, CLAM expects strong demand in the coming years and is preparing its workshops accordingly.</p>
+          </details>
+        </div>
+      </article>
+      <article class="release">
+        <time datetime="2026-11-05">05.11<small>2026 · Toulon</small></time>
+        <div>
+          <h3>Lean production: how CLAM keeps its prices low</h3>
+          <p>CLAM has reorganised its moulding and finishing workshops around lean production methods. Fewer parts, less waste and shorter build times.</p>
+          <details><summary>Read more</summary>
+            <p>Inspired by the car industry, CLAM now uses standard components across its hulls and checks every unit at each step instead of at the end of the line. The result: a lower production cost, fewer defects and a price that remains one of the most competitive on the market.</p>
+          </details>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- SOCIAL NETWORK + CONTACT DETAILS -->
+  <section id="contact" class="gutter">
+    <div class="page contact">
+      <div>
+        <div class="kicker label">Contact</div>
+        <h2 class="display plate">Write to us.</h2>
+        <div class="addr">
+          <div><span class="label">Address</span>CLAM Boats, Port de Toulon, Quai des Constructeurs, 83000 Toulon, France</div>
+          <div><span class="label">Phone</span>+33 (0)4 94 00 00 00</div>
+          <div><span class="label">Email</span>contact@clam-boats.fr</div>
+          <div><span class="label">Opening hours</span>Monday to Friday, 8:30 am to 5:45 pm</div>
+          <div><span class="label">Follow us</span>
+            <a class="insta" href="https://www.instagram.com/clam.boats/" target="_blank" rel="noopener" style="margin-top:8px"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM12 2c-2.7 0-3 0-4.1.1C4.4 2.2 2.2 4.4 2.1 7.9 2 9 2 9.3 2 12s0 3 .1 4.1c.1 3.5 2.3 5.7 5.8 5.8 1.1.1 1.4.1 4.1.1s3 0 4.1-.1c3.5-.1 5.7-2.3 5.8-5.8.1-1.1.1-1.4.1-4.1s0-3-.1-4.1c-.1-3.5-2.3-5.7-5.8-5.8C15 2 14.7 2 12 2z"/></svg>@clam.boats</a>
+          </div>
+        </div>
+      </div>
+      <form id="contact-form" novalidate>
+        <label for="f-name">Your name<input id="f-name" name="name" autocomplete="name" placeholder="Jane Smith"></label>
+        <label for="f-email">Email address<input id="f-email" name="email" type="email" autocomplete="email" placeholder="jane@example.com"></label>
+        <label for="f-topic">I am
+          <select id="f-topic" name="topic">
+            <option>A dealer interested in CLAM boats</option>
+            <option>A fisherman with an EU renewal project</option>
+            <option>A journalist</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label for="f-msg">Message<textarea id="f-msg" name="message" placeholder="Tell us about your project"></textarea></label>
+        <button type="submit">Send</button>
+        <p class="sent" id="sent" role="status" hidden>Thank you! This is a demo form, so no message was actually sent.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="gutter">
+  <div class="page">
+    <span class="display">Keep CLAM.</span>
+    <p>© 2027 CLAM Boats, Toulon. Website created for the SeaTech Company Project, English Challenge. CLAM is a fictional company and its partnerships are part of an educational simulation.</p>
+  </div>
+</footer>
+
+<script type="text/vtt" id="clip-vtt">
+WEBVTT
+
+00:01.000 --> 00:04.900
+Every morning, thousands of European fishermen head out to sea.
+
+00:05.300 --> 00:08.900
+In Toulon, at CLAM, we build the boats they rely on.
+
+00:09.300 --> 00:14.200
+Strong, simple hulls. No frills. Built to last for decades.
+
+00:14.600 --> 00:17.400
+We build smart, so we can keep our prices low.
+
+00:17.800 --> 00:24.200
+That is why the European fishing fleet renewal programme chose CLAM as an industrial partner.
+
+00:24.500 --> 00:29.000
+CLAM. Built for the water. Made for you. Keep CLAM.
+</script>
+<script type="text/vtt" id="spot-vtt">
+WEBVTT
+
+00:00.800 --> 00:04.700
+Noise. Stress. Traffic jams.
+
+00:05.800 --> 00:07.500
+And then… nothing at all.
+
+00:07.900 --> 00:13.300
+A solid hull. Three wooden benches. Row it or use the motor: go wherever you want.
+
+00:13.600 --> 00:17.400
+The CLAM Telline. Simple, robust, and at the best price.
+
+00:17.800 --> 00:20.800
+CLAM. With CLAM, we keep calm.
+</script>
+<script>
+// English subtitles for both films, served from the page itself.
+[['clip-track','clip-vtt'],['spot-track','spot-vtt']].forEach(function(p){
+  var t=document.getElementById(p[0]); if(!t) return;
+  var v=document.getElementById(p[1]).textContent.trim()+"\n";
+  t.src=URL.createObjectURL(new Blob([v],{type:"text/vtt"})); t.track.mode="showing";
+});
+document.getElementById('contact-form').addEventListener('submit',function(e){
+  e.preventDefault(); document.getElementById('sent').hidden=false;
+});
+</script>
+</body>
+</html>
